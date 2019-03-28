@@ -28,5 +28,5 @@ func main() {
 	fmt.Println("Steg Files: " + strings.Join(stegFiles, ","))
 	fmt.Printf("Image Dimensions: %dx%d\n", width, height)
 	fmt.Printf("Image Bit Capacity: %d\n", util.GetImageBitCapacity(inputImage))
-	fmt.Printf("Required space: %d\n", util.GetBitsFromBytes(zipFile))
+	fmt.Printf("Required space: %d\n", util.GetNumBitsFromBytes(zipFile))
 }
