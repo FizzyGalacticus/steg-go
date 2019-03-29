@@ -45,7 +45,7 @@ func addFileToZip(zipWriter *zip.Writer, filename string) error {
 	return err
 }
 
-func compressFiles(files []string, library string) []byte {
+func compressFiles(files []string, library string) Bytes {
 	var buf bytes.Buffer
 	var w *zip.Writer
 
@@ -74,10 +74,10 @@ func compressFiles(files []string, library string) []byte {
 
 // ZipFiles - Takes file paths to compress into
 // a single zipfile, and returns the zipfile bytes
-func ZipFiles(files []string) []byte {
+func ZipFiles(files []string) Bytes {
 	return compressFiles(files, "zip")
 }
 
-// func GZipFiles(files []string) []byte {
+// func GZipFiles(files []string) Bytes {
 // 	return compressFiles(files, "gzip")
 // }

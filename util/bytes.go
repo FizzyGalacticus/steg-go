@@ -4,16 +4,20 @@ import (
 	"strings"
 )
 
+type Bits []bool
+
+type Bytes []byte
+
 // GetNumBitsFromBytes - Returns the number of
 // bits that are in a given set of bytes
-func GetNumBitsFromBytes(bytes *[]byte) int64 {
+func GetNumBitsFromBytes(bytes *Bytes) int64 {
 	return int64(len(*bytes) * 8)
 }
 
 // GetBitsFromByte - Retrieves the bits of a byte
 // as an array of bool
-func GetBitsFromByte(b byte) []bool {
-	bits := make([]bool, GetNumBitsFromBytes(&[]byte{b}))
+func GetBitsFromByte(b byte) Bits {
+	bits := make(Bits, GetNumBitsFromBytes(&Bytes{b}))
 
 	for i := 1; i < 9; i++ {
 		val := int8(b) & (1 << uint8(8-i))
@@ -26,7 +30,7 @@ func GetBitsFromByte(b byte) []bool {
 
 // GetByteFromBits - Converts 8-bit array to
 // a byte
-func GetByteFromBits(bits []bool) byte {
+func GetByteFromBits(bits Bits) byte {
 	var b int8
 
 	for i, bit := range bits {
@@ -40,8 +44,8 @@ func GetByteFromBits(bits []bool) byte {
 
 // GetBytesFromBits - Converts a bit array to
 // a byte array
-func GetBytesFromBits(bits []bool) []byte {
-	bytes := make([]byte, len(bits)/8)
+func GetBytesFromBits(bits Bits) Bytes {
+	bytes := make(Bytes, len(bits)/8)
 
 	for i := 0; i < len(bits); i += 8 {
 		bytes[i/8] = GetByteFromBits(bits[i : i+8])
@@ -52,8 +56,8 @@ func GetBytesFromBits(bits []bool) []byte {
 
 // GetBitsFromBytes - Retrieves the bits of a byte
 // array as an array of bool
-func GetBitsFromBytes(bytes []byte) []bool {
-	bits := make([]bool, GetNumBitsFromBytes(&bytes))
+func GetBitsFromBytes(bytes Bytes) Bits {
+	bits := make(Bits, GetNumBitsFromBytes(&bytes))
 
 	for i, b := range bytes {
 		for j, bit := range GetBitsFromByte(b) {
@@ -66,7 +70,7 @@ func GetBitsFromBytes(bytes []byte) []bool {
 
 // GetBitStringFromBytes - Retrieves the bit string
 // of a byte array
-func GetBitStringFromBytes(bytes []byte) string {
+func GetBitStringFromBytes(bytes Bytes) string {
 	var builder strings.Builder
 	bits := GetBitsFromBytes(bytes)
 
@@ -84,13 +88,13 @@ func GetBitStringFromBytes(bytes []byte) string {
 // GetBitStringFromString - Retrieves the decoded string
 // of a bit string
 func GetBitStringFromString(str string) string {
-	return GetBitStringFromBytes([]byte(str))
+	return GetBitStringFromBytes(Bytes(str))
 }
 
 // GetBitsFromBitString - Converts a bit string to a
 // bit array
-func GetBitsFromBitString(bitStr string) []bool {
-	bits := make([]bool, len(bitStr))
+func GetBitsFromBitString(bitStr string) Bits {
+	bits := make(Bits, len(bitStr))
 
 	for i, char := range bitStr {
 		if string(char) == "1" {
@@ -105,8 +109,8 @@ func GetBitsFromBitString(bitStr string) []bool {
 
 // GetBytesFromBitString - Converts a bit string to a
 // byte array
-func GetBytesFromBitString(bitStr string) []byte {
-	bytes := make([]byte, len(bitStr)/8)
+func GetBytesFromBitString(bitStr string) Bytes {
+	bytes := make(Bytes, len(bitStr)/8)
 
 	for i := 0; i < len(bitStr); i += 8 {
 		bits := GetBitsFromBitString(bitStr[i : i+8])

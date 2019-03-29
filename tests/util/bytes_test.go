@@ -7,15 +7,15 @@ import (
 
 func TestGetNumBitsFromBytes(t *testing.T) {
 	type testTable struct {
-		n        []byte
+		n        util.Bytes
 		expected int64
 	}
 
 	tests := []testTable{
-		{[]byte("a"), 8},
-		{[]byte("aa"), 16},
-		{[]byte("aaa"), 24},
-		{[]byte("aaaa"), 32},
+		{util.Bytes("a"), 8},
+		{util.Bytes("aa"), 16},
+		{util.Bytes("aaa"), 24},
+		{util.Bytes("aaaa"), 32},
 	}
 
 	for _, tt := range tests {
@@ -30,11 +30,11 @@ func TestGetNumBitsFromBytes(t *testing.T) {
 func TestGetBitsFromByte(t *testing.T) {
 	type testTable struct {
 		n        byte
-		expected []bool
+		expected util.Bits
 	}
 
 	tests := []testTable{
-		{[]byte("a")[0], []bool{false, true, true, false, false, false, false, true}},
+		{util.Bytes("a")[0], util.Bits{false, true, true, false, false, false, false, true}},
 	}
 
 	for _, tt := range tests {
@@ -50,12 +50,12 @@ func TestGetBitsFromByte(t *testing.T) {
 
 func TestGetByteFromBits(t *testing.T) {
 	type testTable struct {
-		n        []bool
+		n        util.Bits
 		expected byte
 	}
 
 	tests := []testTable{
-		{[]bool{false, true, true, false, false, false, false, true}, []byte("a")[0]},
+		{util.Bits{false, true, true, false, false, false, false, true}, util.Bytes("a")[0]},
 	}
 
 	for _, tt := range tests {
