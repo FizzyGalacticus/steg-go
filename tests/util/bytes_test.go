@@ -66,3 +66,27 @@ func TestGetByteFromBits(t *testing.T) {
 		}
 	}
 }
+
+func TestGetBitsFromBytes(t *testing.T) {
+	t.Skip()
+}
+
+func TestGetBitStringFromBytes(t *testing.T) {
+	t.Skip()
+}
+
+func TestGetBitStringFromString(t *testing.T) {
+	t.Skip()
+}
+
+func TestGetBitsFromBitString(t *testing.T) {
+	t.Skip()
+}
+
+func TestGetBytesFromBitString(t *testing.T) {
+	t.Skip()
+}
+
+func TestGetStringFromBitString(t *testing.T) {
+	t.Skip()
+}
