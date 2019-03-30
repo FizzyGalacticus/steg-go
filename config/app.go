@@ -12,44 +12,44 @@ func getParams() (string, string, []string) {
 // Arguments - Input arguments to use for
 // steg processing
 type Arguments struct {
-	InFile  string   `json:"inFile"`
-	OutFile string   `json:"outFile"`
-	Files   []string `json:"files"`
+	CoverFile string   `json:"coverFile"`
+	StegFile  string   `json:"stegFile"`
+	Files     []string `json:"files"`
 }
 
 // GetArguments - Retrieves the full
 // Arguments object
 func GetArguments() Arguments {
 	if len(os.Args) < 4 {
-		usage := "Usage:\n\t%s <input_image> <output_image> ...<steg_files>\n"
+		usage := "Usage:\n\t%s <cover_image> <steg_image> ...<files>\n"
 
 		fmt.Printf(usage, os.Args[0])
 		os.Exit(1)
 	}
 
-	inFile, outFile, files := getParams()
+	coverFile, stegFile, files := getParams()
 
 	return Arguments{
-		InFile:  inFile,
-		OutFile: outFile,
-		Files:   files,
+		CoverFile: coverFile,
+		StegFile:  stegFile,
+		Files:     files,
 	}
 }
 
-// GetInFile - Retrieves the path to the
+// GetCoverFile - Retrieves the path to the
 // image file to use as a source
-func GetInFile() string {
+func GetCoverFile() string {
 	args := GetArguments()
 
-	return args.InFile
+	return args.CoverFile
 }
 
-// GetOutFile - Retrieves the path to the
+// GetStegFile - Retrieves the path to the
 // image file to use as the output
-func GetOutFile() string {
+func GetStegFile() string {
 	args := GetArguments()
 
-	return args.OutFile
+	return args.StegFile
 }
 
 // GetFiles - Retrieves the list of

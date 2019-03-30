@@ -13,20 +13,35 @@ import (
 )
 
 func main() {
-	inFile := config.GetInFile()
-	outFile := config.GetOutFile()
-	stegFiles := config.GetFiles()
+	coverFile := config.GetCoverFile()
+	stegFile := config.GetStegFile()
+	files := config.GetFiles()
 
-	inputImage := util.DecodeImage(inFile)
+	coverImage := util.DecodeImage(coverFile)
 
-	zipFile := util.ZipFiles(stegFiles)
+	imageCapacity := util.GetImageBitCapacity(coverImage)
 
-	width, height := util.GetImageSize(inputImage)
+	// File bytes + a single byte for how many files
+	fileSizes := util.GetFileSizes(files)
+	requiredCapacity := (fileSizes + 1) * 8
 
-	fmt.Println("Input: " + inFile)
-	fmt.Println("Output: " + outFile)
-	fmt.Println("Steg Files: " + strings.Join(stegFiles, ","))
-	fmt.Printf("Image Dimensions: %dx%d\n", width, height)
-	fmt.Printf("Image Bit Capacity: %d\n", util.GetImageBitCapacity(inputImage))
-	fmt.Printf("Required space: %d\n", util.GetNumBitsFromBytes(&zipFile))
+	for _, filename := range files {
+		// filename bytes
+		requiredCapacity += int64(len(filename) * 8)
+	}
+
+	if imageCapacity < requiredCapacity {
+		var errBuilder strings.Builder
+
+		errBuilder.WriteString("Cannot fit files into image.\n")
+		errBuilder.WriteString(fmt.Sprintf("Required space: %d bytes\n", requiredCapacity/8))
+		errBuilder.WriteString(fmt.Sprintf("Available space: %d bytes\n", imageCapacity/8))
+
+		panic(errBuilder.String())
+	} else {
+		// Process as normal
+
+		// Save new image
+		util.SaveImage(coverImage, stegFile)
+	}
 }
