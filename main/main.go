@@ -21,14 +21,8 @@ func main() {
 
 	imageCapacity := util.GetImageBitCapacity(coverImage)
 
-	// File bytes + a single byte for how many files
-	fileSizes := util.GetFileSizes(files)
-	requiredCapacity := (fileSizes + 1) * 8
-
-	for _, filename := range files {
-		// filename bytes
-		requiredCapacity += int64(len(filename) * 8)
-	}
+	// File bits + number of files
+	requiredCapacity := util.GetRequiredSizeForFiles(files) + 8
 
 	if imageCapacity < requiredCapacity {
 		var errBuilder strings.Builder
@@ -40,6 +34,21 @@ func main() {
 		panic(errBuilder.String())
 	} else {
 		// Process as normal
+		bits := make(util.Bits, 0)
+
+		// Metadata for number of files
+		numFiles := len(files)
+		numFileBits := util.GetBitsFromInt8(int8(numFiles))
+
+		bits = append(bits, numFileBits...)
+
+		// Gather payload
+		for _, filename := range files {
+			bits = append(bits, util.BuildFilePayload(filename)...)
+		}
+
+		// Insert payload into image
+		util.InsertBitsIntoImage(coverImage, bits)
 
 		// Save new image
 		util.SaveImage(coverImage, stegFile)

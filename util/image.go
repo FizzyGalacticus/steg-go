@@ -65,7 +65,16 @@ func (e *EditableImage) At(x, y int) color.Color {
 }
 
 // Pixel - Alias for color.RGBA
-type Pixel color.RGBA
+type Pixel struct {
+	R uint32
+	G uint32
+	B uint32
+	A uint32
+}
+
+func (p *Pixel) RGBA() (uint32, uint32, uint32, uint32) {
+	return p.R, p.G, p.B, p.A
+}
 
 // Takes a filesystem path and returns
 // a decoded image
@@ -110,6 +119,15 @@ func GetImageSize(i *EditableImage) (int, int) {
 	return bounds.Max.X, bounds.Max.Y
 }
 
+func GetPixelFromRGBA(r, g, b, a uint32) Pixel {
+	return Pixel{
+		R: r,
+		G: g,
+		B: b,
+		A: a,
+	}
+}
+
 // GetImageBitCapacity - Returns how many bits can
 // fit inside of an image
 func GetImageBitCapacity(i *EditableImage) int64 {
@@ -125,21 +143,16 @@ func GetImagePixel(i *EditableImage, x int, y int) Pixel {
 	r, g, b, a := (*i).At(x, y).RGBA()
 
 	return Pixel{
-		R: uint8(r),
-		G: uint8(g),
-		B: uint8(b),
-		A: uint8(a),
+		R: r,
+		G: g,
+		B: b,
+		A: a,
 	}
 }
 
 // SetImagePixel - Sets the pixel color at given coordinates
 func SetImagePixel(i *EditableImage, x int, y int, p Pixel) {
-	i.Set(x, y, color.RGBA{
-		R: p.R,
-		G: p.G,
-		B: p.B,
-		A: p.A,
-	})
+	i.Set(x, y, &p)
 }
 
 // SaveImage - Saves the given image to the given filename

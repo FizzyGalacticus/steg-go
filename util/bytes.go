@@ -4,14 +4,53 @@ import (
 	"strings"
 )
 
+// Bits - typedef for bits
 type Bits []bool
 
+// Bytes - typedef for bytes
 type Bytes []byte
 
 // GetNumBitsFromBytes - Returns the number of
 // bits that are in a given set of bytes
 func GetNumBitsFromBytes(bytes *Bytes) int64 {
 	return int64(len(*bytes) * 8)
+}
+
+func GetByteFromInt8(in int8) byte {
+	return byte(in)
+}
+
+func GetBitsFromInt8(in int8) Bits {
+	b := GetByteFromInt8(in)
+	return GetBitsFromByte(b)
+}
+
+func GetBytesFromInt64(in int64) Bytes {
+	bytes := make(Bytes, 8)
+
+	for i := 0; i < 8; i++ {
+		b := in >> uint(8*i)
+
+		bytes[i] = byte(b)
+	}
+
+	return bytes
+}
+
+func GetBitsFromInt64(in int64) Bits {
+	bytes := GetBytesFromInt64(in)
+	return GetBitsFromBytes(bytes)
+}
+
+func GetInt64FromBytes(bytes Bytes) int64 {
+	ret := int64(0)
+
+	for i := 7; i >= 0 && i < len(bytes); i-- {
+		ret = ret << 8
+		ret = ret | int64(bytes[i])
+	}
+
+	return ret
 }
 
 // GetBitsFromByte - Retrieves the bits of a byte
